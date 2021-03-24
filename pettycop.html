@@ -1,0 +1,253 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+
+        @font-face {
+            font-family: hannad;
+            src: url(fonts/myhandwriting.ttf);
+           
+        }
+       body{
+           background-color: rgb(0, 0, 0);
+           color: white;
+        
+           text-align: center;
+       }
+       div{
+           font-size: 36px;
+           font-weight: bold;
+       }
+
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>coffmanportfolio/homepage.com</title>
+
+    <br>
+    <br>
+    <br>
+    <h1 style="text-align: center; font-size: 46px;">Coffman's Portfolio</h1>
+    <div id=linkcontainer>
+        <br>
+        <legend><div>link Container</div></legend>
+        <br>
+        <a href="projects/Climbing/index1.html">life Ladder</a>
+        <br>
+        <a href="projects/RPS/index2.html">ROCK PAPER SCISSORS</a>
+
+    </div>
+   
+     
+    
+    
+
+    <script>
+
+        //0B0B0B0B0 KEYDOWN FUNCTION
+        window.addEventListener("keydown", function (event) {
+          if (event.defaultPrevented) {
+            return; // Do nothing if the event was already processed
+          }
+          switch (event.key) {
+
+            case "e":
+
+            interactKey();
+
+            break;
+
+            case "s":
+          
+            move('down');
+              // code for "down arrow" key press.
+              break;
+            case "w":
+           
+            move('up');
+              // code for "up arrow" key press.
+              break;
+            case "a":
+          
+            move('left');
+              // code for "left arrow" key press.
+              break;
+            case "d":
+        
+            move('right');
+              // code for "right arrow" key press.
+              break;
+        
+            default:
+              return; // Quit when this doesn't handle the key event.
+          }
+         //borrowed keyboard inputs, going to frankenstein with game
+          event.preventDefault();
+        }, true);
+        
+        //0B0B0B0BB0B0 KEYUP FUNCTION
+        window.addEventListener("keyup", function (event) {
+          if (event.defaultPrevented) {
+            return; // Do nothing if the event was already processed
+          }
+          switch (event.key) {
+            case "s":
+            clearmove();
+              // code for "down arrow" key press.
+              break;
+            case "w":
+            clearmove();
+              // code for "up arrow" key press.
+              break;
+            case "a":
+            clearmove();
+              // code for "left arrow" key press.
+              break;
+            case "d":
+            clearmove();
+              // code for "right arrow" key press.
+              break;
+        
+            default:
+              return; // Quit when this doesn't handle the key event.
+          }
+         //borrowed keyboard inputs, going to frankenstein with game
+          event.preventDefault();
+        }, true);
+        
+    
+        
+        </script>
+        
+        <style>
+        canvas {
+           
+            background-color: #c9040400;
+        }
+        </style>
+        </head>
+        <body onload="startGame()">
+        <script>
+        
+        var myGamePiece;
+        var effect;
+        var halo = false;
+
+        function startGame() {
+            
+            myGamePiece = new component(120, 120, "images/playeridle.png", 10, 120, "image");
+            myGameArea.start();
+        }
+        
+        var myGameArea = {
+            canvas : document.createElement("canvas"),
+            start : function() {
+                this.canvas.width = 600;
+                this.canvas.height = 600;
+                this.context = this.canvas.getContext("2d");
+                document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+                this.frameNo = 0;
+                this.interval = setInterval(updateGameArea, 20);
+                },
+            clear : function() {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+              
+            },
+            stop : function() {
+                clearInterval(this.interval);
+            }
+        }
+        
+        function component(width, height, color, x, y, type) {
+            this.type = type;
+            if (type == "image") {
+                this.image = new Image();
+                this.image.src = color;
+            }
+
+            this.width = width;
+            this.height = height;
+            this.speedX = 0;
+            this.speedY = 0;    
+        
+            this.x = x;
+            this.y = y;    
+            this.update = function() {
+                ctx = myGameArea.context;
+
+
+                if (type == "image") {
+                    ctx.drawImage(this.image, 
+                        this.x, 
+                        this.y,
+                        this.width, this.height);
+                } 
+               // if (type == "effect") {
+                //    ctx.drawImage(effect, myGamePiece.x, myGamePiece.y)
+               // }
+                
+                
+                else {
+                    ctx.fillStyle = color;
+                    ctx.fillRect(this.x, this.y, this.width, this.height);
+                }
+            }
+            this.newPos = function() {
+                this.x += this.speedX;
+                this.y += this.speedY;        
+            }
+        }
+        
+        function updateGameArea() {
+            myGameArea.clear();
+            myGamePiece.newPos();
+            myGamePiece.update();
+            if(effect != null && halo==true){
+           
+           effect.update();
+           effect.x = myGamePiece.x;
+           effect.y = myGamePiece.y - 20;
+            }
+        }
+        
+        function move(dir) {
+            
+            if (dir == "up") {myGamePiece.speedY = -3; myGamePiece.image.src = "images/playeridle"+dir+".png"}
+            if (dir == "down") {myGamePiece.speedY = 3; myGamePiece.image.src = "images/playeridle"+dir+".png"}
+            if (dir == "left") {myGamePiece.speedX = -3; myGamePiece.image.src = "images/playeridle"+dir+".png"}
+            if (dir == "right") {myGamePiece.speedX = 3; myGamePiece.image.src = "images/playeridle"+dir+".png"}
+        }
+        
+        function clearmove() {
+           //myGamePiece.image.src = "images/playeridle.png";
+            myGamePiece.speedX = 0; 
+            myGamePiece.speedY = 0; 
+        }
+
+        function interactKey(){
+            effect = new component(120, 120, "images/halohat.png", myGamePiece.x, myGamePiece.y, "image");
+
+            if(halo==false){
+                halo=true;
+                console.log("Halo on");
+
+            }else{
+                halo=false;
+                console.log("Halo off");
+            }
+            
+            
+
+        }
+
+        </script>
+
+
+
+
+
+
+    
+</body>
+</html>
