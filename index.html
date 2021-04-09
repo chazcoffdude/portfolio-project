@@ -1,47 +1,55 @@
   <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!--https://w3bits.com/css-spritesheet-animation/ source of help-->
     <style>
 
         @font-face {
             font-family: hannad;
             src: url(fonts/myhandwriting.ttf);
-           
+            background-color: black;
         }
        body{
+           border-spacing: 0;
+           margin:0;
            background-color: rgb(0, 0, 0);
-           color: white;
-        
+           background-image: url("images/mudwalltexture.png");
+           border-image-repeat:round;
+           background-size:150px;
+
+
+           font-family: hannad;
            text-align: center;
        }
        div{
            font-size: 36px;
            font-weight: bold;
        }
-
+   
+@keyframes catwalk {
+  100% { background-position: -2393px 0; }
+}
     </style>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>coffmanportfolio/homepage.com</title>
-
-    <br>
-    <br>
-    <br>
-    <h1 style="text-align: center; font-size: 46px;">Coffman's Portfolio</h1>
-    <div id=linkcontainer>
-        <br>
+    <title>HomeofCoffman.com</title>
+        <!--<br>
+        <h1 style="text-align: center; font-size: 46px;">i aM coffMan's portfolio.</h1>
         <legend><div>link Container</div></legend>
         <br>
         <a href="projects/Climbing/index1.html">life Ladder</a>
         <br>
+        //https://mr-easy.github.io/2017-06-26-creating-spritesheet-animation-in-html5-canvas-using-javascript/
         <a href="projects/RPS/index2.html">ROCK PAPER SCISSORS</a>
+        -->
+  
+    
+    <script src="jss/script.js">
 
-    </div>
-   
-     
-    
-    
+
+    </script>
+
 
     <script>
 
@@ -50,32 +58,42 @@
           if (event.defaultPrevented) {
             return; // Do nothing if the event was already processed
           }
-          switch (event.key) {
+          switch (event.key.toLocaleLowerCase()) {
 
             case "e":
 
-            interactKey();
+            interactKey("images/halohat.png");
 
             break;
+
+            case "u":
+
+  interactKey("images/dunshat.png");
+break;
 
             case "s":
           
             move('down');
+          
               // code for "down arrow" key press.
               break;
             case "w":
            
             move('up');
+           
+            
               // code for "up arrow" key press.
               break;
             case "a":
           
             move('left');
+         
               // code for "left arrow" key press.
               break;
             case "d":
         
             move('right');
+       
               // code for "right arrow" key press.
               break;
         
@@ -91,21 +109,21 @@
           if (event.defaultPrevented) {
             return; // Do nothing if the event was already processed
           }
-          switch (event.key) {
+          switch (event.key.toLocaleLowerCase()) {
             case "s":
-            clearmove();
+            clearmove('down');
               // code for "down arrow" key press.
               break;
             case "w":
-            clearmove();
+            clearmove('up');
               // code for "up arrow" key press.
               break;
             case "a":
-            clearmove();
+            clearmove('left');
               // code for "left arrow" key press.
               break;
             case "d":
-            clearmove();
+            clearmove('right');
               // code for "right arrow" key press.
               break;
         
@@ -122,8 +140,9 @@
         
         <style>
         canvas {
-           
-            background-color: #c9040400;
+            width: 100%;
+            height: 100%;
+            background-color: #00000000;
         }
         </style>
         </head>
@@ -132,27 +151,57 @@
         
         var myGamePiece;
         var effect;
+        var activemove = false; // timer to determine if the character is currently moving
         var halo = false;
+        
+
+           
+
+       
 
         function startGame() {
+
+            //lebackground = new component(width = window.innerWidth, height = window.innerHeight, "images/mudwalltexture.png", 10, 120, "image");
             
+
+           
+
+
+
             myGamePiece = new component(120, 120, "images/playeridle.png", 10, 120, "image");
+  
             myGameArea.start();
+
         }
+
+       
+       
+
+                
+        
+
+
+        
+
+
         
         var myGameArea = {
             canvas : document.createElement("canvas"),
             start : function() {
-                this.canvas.width = 600;
-                this.canvas.height = 600;
+              this.canvas.width = window.innerWidth;
+              this.canvas.height = window.innerHeight;
+              
+
+
+
                 this.context = this.canvas.getContext("2d");
                 document.body.insertBefore(this.canvas, document.body.childNodes[0]);
                 this.frameNo = 0;
                 this.interval = setInterval(updateGameArea, 20);
                 },
             clear : function() {
-                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-              
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+          
             },
             stop : function() {
                 clearInterval(this.interval);
@@ -174,8 +223,22 @@
             this.x = x;
             this.y = y;    
             this.update = function() {
+
+
+                
                 ctx = myGameArea.context;
 
+                if(.5*myGamePiece.y > 120){
+                  myGamePiece.height = 120;
+                  myGamePiece.width = 120;
+                  
+                }else{
+                  myGamePiece.height = myGamePiece.height = .5*myGamePiece.y;
+                  myGamePiece.width = myGamePiece.height = .5*myGamePiece.y;
+                }
+
+                
+               
 
                 if (type == "image") {
                     ctx.drawImage(this.image, 
@@ -194,47 +257,64 @@
                 }
             }
             this.newPos = function() {
+            
                 this.x += this.speedX;
-                this.y += this.speedY;        
+                this.y += this.speedY;
+               
             }
         }
         
         function updateGameArea() {
             myGameArea.clear();
+            //lebackground.update();
             myGamePiece.newPos();
-            myGamePiece.update();
+            myGamePiece.update(); 
+            
             if(effect != null && halo==true){
            
            effect.update();
            effect.x = myGamePiece.x;
-           effect.y = myGamePiece.y - 20;
+           effect.y = myGamePiece.y - myGamePiece.height/6;
+           effect.height = myGamePiece.height;
+           effect.width = myGamePiece.width;
+
             }
         }
         
         function move(dir) {
             
-            if (dir == "up") {myGamePiece.speedY = -3; myGamePiece.image.src = "images/playeridle"+dir+".png"}
-            if (dir == "down") {myGamePiece.speedY = 3; myGamePiece.image.src = "images/playeridle"+dir+".png"}
-            if (dir == "left") {myGamePiece.speedX = -3; myGamePiece.image.src = "images/playeridle"+dir+".png"}
-            if (dir == "right") {myGamePiece.speedX = 3; myGamePiece.image.src = "images/playeridle"+dir+".png"}
+            if (dir == "up") {myGamePiece.speedY = -3; myGamePiece.image.src = "images/playeridle"+dir+".gif"}
+            if (dir == "down") {myGamePiece.speedY = 3; myGamePiece.image.src = "images/playeridle"+dir+".gif"}
+            if (dir == "left") {myGamePiece.speedX = -3; myGamePiece.image.src = "images/playeridle"+dir+".gif"}
+            if (dir == "right") {myGamePiece.speedX = 3; myGamePiece.image.src = "images/playeridle"+dir+".gif"}
+           
         }
         
-        function clearmove() {
+        function clearmove(dir) {
+   
+            if (dir == "up") {myGamePiece.image.src = "images/playeridle"+dir+".gif"}
+            if (dir == "down") {myGamePiece.image.src = "images/playeridle"+dir+".gif"}
+            if (dir == "left") {myGamePiece.image.src = "images/playeridle"+dir+".gif"}
+            if (dir == "right") {myGamePiece.image.src = "images/playeridle"+dir+".gif"}
+
+
            //myGamePiece.image.src = "images/playeridle.png";
+            if(activemove != true){
             myGamePiece.speedX = 0; 
             myGamePiece.speedY = 0; 
+            }
         }
 
-        function interactKey(){
-            effect = new component(120, 120, "images/halohat.png", myGamePiece.x, myGamePiece.y, "image");
-
+        function interactKey(hat){
+            effect = new component(120, 120, hat, myGamePiece.x, myGamePiece.y, "image");
+        
             if(halo==false){
                 halo=true;
-                console.log("Halo on");
+                console.log("Hat on");
 
             }else{
                 halo=false;
-                console.log("Halo off");
+                console.log("Hat off");
             }
             
             
