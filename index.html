@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <!--https://w3bits.com/css-spritesheet-animation/ source of help-->
@@ -151,6 +151,19 @@ break;
 
 
        //varibles
+
+  this.sound = document.createElement("audio");
+  this.sound.src = "sfx/footstep.mp3";
+  this.sound.setAttribute("preload", "auto");
+  this.sound.setAttribute("controls", "none");
+  this.sound.style.display = "none";
+  document.body.appendChild(this.sound);
+  step = function(){
+    this.sound.currentTime = 0;
+    this.sound.play();
+        }
+     //footstep sound
+
 
        
         var objectlist = [];       
@@ -342,10 +355,13 @@ break;
           
         }
         
+
+      
+
         function move(dir) {
             
             if (dir == "up") {myGamePiece.speedY = -3; myGamePiece.image.src = "images/bunnywalkup/walk ("+framenum+").png"}
-            if (dir == "down") {myGamePiece.speedY = 3; myGamePiece.image.src = "images/bunnywalkdown/walk"+framenum+".png"}
+            if (dir == "down") {myGamePiece.speedY = 3; myGamePiece.image.src = "images/bunnywalkdown/walk ("+framenum+").png"}
             if (dir == "left") {myGamePiece.speedX = -3; myGamePiece.image.src = "images/bunnywalkleft/walk ("+framenum+").png"}
             if (dir == "right") {myGamePiece.speedX = 3; myGamePiece.image.src = "images/bunnywalkright/walk ("+framenum+").png"}
            
@@ -354,7 +370,7 @@ break;
         function clearmove(dir) {
    
             if (dir == "up") {myGamePiece.image.src = "images/bunnyidle"+dir+".png"}
-            if (dir == "down") {myGamePiece.image.src = "images/playeridle"+dir+".gif"}
+            if (dir == "down") {myGamePiece.image.src = "images/bunnyidle"+dir+".png"}
             if (dir == "left") {myGamePiece.image.src = "images/bunnyidle"+dir+".png"}
             if (dir == "right") {myGamePiece.image.src = "images/bunnyidle"+dir+".png"}
 
@@ -365,14 +381,19 @@ break;
             myGamePiece.speedY = 0; 
             }
         }
+        //soundtest
+   
+      
+      
 
         function interactKey(hat){
             effect = new component(120, 120, hat, myGamePiece.x, myGamePiece.y, "image");
-        
+            step();
+            clearmove("down");
             if(halo==false){
                 halo=true;
                 console.log("Hat on");
-
+          
             }else{
                 halo=false;
                 console.log("Hat off");
