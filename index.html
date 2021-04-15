@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
   <!--https://w3bits.com/css-spritesheet-animation/ source of help-->
@@ -148,14 +148,35 @@ break;
         </head>
         <body onload="startGame()">
         <script>
-        
+
+
+       //varibles
+
+       
+        var objectlist = [];       
         var myGamePiece;
+        var framenum = 1;
         var effect;
         var activemove = false; // timer to determine if the character is currently moving
         var halo = false;
         
+        function myloop(){
+          if(framenum > 9){
+          
+            framenum = 0;
+          }
+          framenum++;
+          setTimeout(function(){
+            
+            myloop();
+          
+            ;}, 100);
+          
+          
+          
 
-           
+        }
+        myloop();
 
        
 
@@ -168,23 +189,25 @@ break;
 
 
 
-            myGamePiece = new component(120, 120, "images/playeridle.png", 10, 120, "image");
-  
+            myGamePiece = new component(120, 120, "images/playeridle.png", 10, 120, "image", true);
             myGameArea.start();
+
+            npc = new component(120, 120,"images/playeridle.png", 10, 200, "image", false);
+            objectlist.push(npc);
+
+            paper = new component(120, 120,"images/portfoliopaper.png", 50, 100, "image", false);
+            objectlist.push(paper);
+
 
         }
 
-       
-       
-
-                
-        
+      
 
 
         
 
 
-        
+         
         var myGameArea = {
             canvas : document.createElement("canvas"),
             start : function() {
@@ -198,6 +221,8 @@ break;
                 document.body.insertBefore(this.canvas, document.body.childNodes[0]);
                 this.frameNo = 0;
                 this.interval = setInterval(updateGameArea, 20);
+
+                
                 },
             clear : function() {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -207,14 +232,19 @@ break;
                 clearInterval(this.interval);
             }
         }
+        //testing above
         
-        function component(width, height, color, x, y, type) {
+        //x
+
+        
+        function component(width, height, color, x, y, type, animated) {
             this.type = type;
+            this.animated = animated
             if (type == "image") {
                 this.image = new Image();
                 this.image.src = color;
             }
-
+        
             this.width = width;
             this.height = height;
             this.speedX = 0;
@@ -228,24 +258,46 @@ break;
                 
                 ctx = myGameArea.context;
 
-                if(.5*myGamePiece.y > 120){
+          
+
+                /*if(.5*myGamePiece.y > 120){
                   myGamePiece.height = 120;
                   myGamePiece.width = 120;
                   
                 }else{
                   myGamePiece.height = myGamePiece.height = .5*myGamePiece.y;
                   myGamePiece.width = myGamePiece.height = .5*myGamePiece.y;
-                }
+                }*/
 
                 
                
 
                 if (type == "image") {
+                    
+                    if(this.animated == true){
+                   
                     ctx.drawImage(this.image, 
-                        this.x, 
-                        this.y,
-                        this.width, this.height);
-                } 
+                    this.x, 
+                    this.y,
+        
+                    this.width, this.height,
+                    
+
+                        
+                    
+
+                         //for spritesheet purposes
+                       );
+                }else{
+                ctx.drawImage(this.image, 
+                this.x, 
+                this.y,
+                this.width, this.height, 
+                );
+                }
+                }
+
+               
                // if (type == "effect") {
                 //    ctx.drawImage(effect, myGamePiece.x, myGamePiece.y)
                // }
@@ -266,36 +318,45 @@ break;
         
         function updateGameArea() {
             myGameArea.clear();
+           
             //lebackground.update();
             myGamePiece.newPos();
             myGamePiece.update(); 
-            
+         
+            for(i = 0; i < objectlist.length; i++){
+              if(objectlist[i] != null){
+              
+              objectlist[i].update();  
+              }
+            }
             if(effect != null && halo==true){
            
            effect.update();
+          
            effect.x = myGamePiece.x;
            effect.y = myGamePiece.y - myGamePiece.height/6;
            effect.height = myGamePiece.height;
            effect.width = myGamePiece.width;
-
             }
+
+          
         }
         
         function move(dir) {
             
-            if (dir == "up") {myGamePiece.speedY = -3; myGamePiece.image.src = "images/playeridle"+dir+".gif"}
-            if (dir == "down") {myGamePiece.speedY = 3; myGamePiece.image.src = "images/playeridle"+dir+".gif"}
-            if (dir == "left") {myGamePiece.speedX = -3; myGamePiece.image.src = "images/playeridle"+dir+".gif"}
-            if (dir == "right") {myGamePiece.speedX = 3; myGamePiece.image.src = "images/playeridle"+dir+".gif"}
+            if (dir == "up") {myGamePiece.speedY = -3; myGamePiece.image.src = "images/bunnywalkup/walk ("+framenum+").png"}
+            if (dir == "down") {myGamePiece.speedY = 3; myGamePiece.image.src = "images/bunnywalkdown/walk"+framenum+".png"}
+            if (dir == "left") {myGamePiece.speedX = -3; myGamePiece.image.src = "images/bunnywalkleft/walk ("+framenum+").png"}
+            if (dir == "right") {myGamePiece.speedX = 3; myGamePiece.image.src = "images/bunnywalkright/walk ("+framenum+").png"}
            
         }
         
         function clearmove(dir) {
    
-            if (dir == "up") {myGamePiece.image.src = "images/playeridle"+dir+".gif"}
+            if (dir == "up") {myGamePiece.image.src = "images/bunnyidle"+dir+".png"}
             if (dir == "down") {myGamePiece.image.src = "images/playeridle"+dir+".gif"}
-            if (dir == "left") {myGamePiece.image.src = "images/playeridle"+dir+".gif"}
-            if (dir == "right") {myGamePiece.image.src = "images/playeridle"+dir+".gif"}
+            if (dir == "left") {myGamePiece.image.src = "images/bunnyidle"+dir+".png"}
+            if (dir == "right") {myGamePiece.image.src = "images/bunnyidle"+dir+".png"}
 
 
            //myGamePiece.image.src = "images/playeridle.png";
@@ -315,12 +376,14 @@ break;
             }else{
                 halo=false;
                 console.log("Hat off");
-            }
-            
-            
-
+            }            
         }
+    
 
+
+
+
+//https://mr-easy.github.io/2017-06-26-creating-spritesheet-animation-in-html5-canvas-using-javascript/
         </script>
 
 
