@@ -1,24 +1,20 @@
   <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" type="image/png" href="images/siteicon.png">
   <!--https://w3bits.com/css-spritesheet-animation/ source of help-->
     <style>
 
-        @font-face {
-            font-family: hannad;
-            src: url(fonts/myhandwriting.ttf);
-            background-color: black;
-        }
+      
        body{
+           image-rendering: pixelated;
+           cursor: url("images/cursor.png"), default;
            border-spacing: 0;
            margin:0;
            background-color: rgb(0, 0, 0);
            background-image: url("images/mudwalltexture.png");
            border-image-repeat:round;
            background-size:150px;
-
-
-           font-family: hannad;
            text-align: center;
        }
        div{
@@ -33,7 +29,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HomeofCoffman.com</title>
+    <title>Coffman Portfolio</title>
         <!--<br>
         <h1 style="text-align: center; font-size: 46px;">i aM coffMan's portfolio.</h1>
         <legend><div>link Container</div></legend>
@@ -96,13 +92,39 @@ break;
        
               // code for "right arrow" key press.
               break;
+
+            //!! PLAYER #2 CONTROLS BELOW
+            
+              case "k":
+          zormove('down');
         
-            default:
-              return; // Quit when this doesn't handle the key event.
+            // code for "down arrow" key press.
+            break;
+          case "i":
+         
+          zormove('up');
+         
+          
+            // code for "up arrow" key press.
+            break;
+          case "j":
+        
+          zormove('left');
+       
+            // code for "left arrow" key press.
+            break;
+          case "l":
+      
+          zormove('right');
+     
+            // code for "right arrow" key press.
+            break; 
+        
           }
          //borrowed keyboard inputs, going to frankenstein with game
           event.preventDefault();
         }, true);
+
         
         //0B0B0B0BB0B0 KEYUP FUNCTION
         window.addEventListener("keyup", function (event) {
@@ -125,14 +147,40 @@ break;
             case "d":
             clearmove('right');
               // code for "right arrow" key press.
+              break; 
+
+             
+               // PLAYER #2 TWO INPUT CONTROLS BELOW
+
+              case "k":
+            zorclearmove('down');
+              // code for "down arrow" key press.
               break;
+            case "i":
+            zorclearmove('up');
+              // code for "up arrow" key press.
+              break;
+            case "j":
+            zorclearmove('left');
+              // code for "left arrow" key press.
+              break;
+            case "l":
+            zorclearmove('right');
+              // code for "right arrow" key press.
+              break; 
+
+
         
-            default:
-              return; // Quit when this doesn't handle the key event.
           }
-         //borrowed keyboard inputs, going to frankenstein with game
+          //borrowed keyboard inputs, going to frankenstein with game
           event.preventDefault();
-        }, true);
+          }, true);
+
+
+
+
+
+    
         
     
         
@@ -144,13 +192,16 @@ break;
             height: 100%;
             background-color: #00000000;
         }
-        </style>
+        </style> 
+        
         </head>
         <body onload="startGame()">
+
+
+         
         <script>
 
 
-       //varibles
 
   this.sound = document.createElement("audio");
   this.sound.src = "sfx/footstep.mp3";
@@ -162,18 +213,65 @@ break;
     this.sound.currentTime = 0;
     this.sound.play();
         }
+
+
+
      //footstep sound
 
 
        
-        var objectlist = [];       
+         //varibles
+        var pages = [[], [], [], []];
+       
+        
+        
         var myGamePiece;
         var framenum = 1;
         var effect;
+        var winwidth = window.innerWidth;
+        var winheight = window.innerHeight;
+        var pagenum = 2; //depending on page, the game will load different assets as background props.
         var activemove = false; // timer to determine if the character is currently moving
         var halo = false;
         
-        function myloop(){
+       //loop below is intended to dump a bunch of clones of the player's walking frames. 
+       //These will prevent stuttering in the animation, & will not be seen by the user.
+
+       //right
+       dir = "right";
+       for(i = 0; i < 9; i++){
+         var imgdump = document.createElement("div");
+         imgdump.innerHTML = '<img src="images/bunnywalk'+dir+'/walk ('+(i+1)+').png" style="display:none">';
+         document.body.appendChild(imgdump);
+       }
+       //left
+       dir = "left";
+       for(i = 0; i < 9; i++){
+         var imgdump = document.createElement("div");
+         imgdump.innerHTML = '<img src="images/bunnywalk'+dir+'/walk ('+(i+1)+').png" style="display:none">';
+         document.body.appendChild(imgdump);
+       }
+       //up
+       dir = "up";
+       for(i = 0; i < 9; i++){
+         var imgdump = document.createElement("div");
+         imgdump.innerHTML = '<img src="images/bunnywalk'+dir+'/walk ('+(i+1)+').png" style="display:none">';
+         document.body.appendChild(imgdump);
+       }
+       //down
+       dir = "down";
+       for(i = 0; i < 9; i++){
+         var imgdump = document.createElement("div");
+         imgdump.innerHTML = '<img src="images/bunnywalk'+dir+'/walk ('+(i+1)+').png" style="display:none">';
+         document.body.appendChild(imgdump);
+       }
+
+        function startGame() {
+
+            //lebackground = new component(width = window.innerWidth, height = window.innerHeight, "images/mudwalltexture.png", 10, 120, "image");
+            
+
+            function myloop(){     //<-- used to constantly switch animation frames while walking
           if(framenum > 9){
           
             framenum = 0;
@@ -182,50 +280,75 @@ break;
           setTimeout(function(){
             
             myloop();
-          
+            if(activemove == true){
+            
+            }
+              
+            
+     
             ;}, 100);
-          
-          
-          
 
         }
         myloop();
 
-       
 
-        function startGame() {
 
-            //lebackground = new component(width = window.innerWidth, height = window.innerHeight, "images/mudwalltexture.png", 10, 120, "image");
+            //PLAYER 1
+            myGamePiece = new component(120, 120, "images/bunnyidledown.png", 10, 120, "image", true);
+            myGameArea.start();
+            //PLAYER 2
+            myGamePiece2 = new component(120, 120, "images/bunnyidledown.png", winwidth + 10, 120, "image", true);
+            myGamePiece2
+
+
+             //items for page #1
+             tv = new component(444, 444,"images/brokentv.png", winwidth/3, winheight/10, "image", false);
+            pages[1].push(tv);
+
+
+            paper = new component(120, 120,"images/portfoliopaper.png", 50, 100, "image", false);
+            pages[1].push(paper);
+
+
+            //items for page #2
+            arrow = new component(344*.65, 213*.65,"images/arrowrightresume.png", winwidth - winwidth * .2, winheight/4, "image", false);
+            pages[2].push(arrow);
+
+            arrow = new component(344*.65, 213*.65,"images/arrowleft.png", winwidth - winwidth * .95, winheight/4, "image", false);
+            pages[2].push(arrow);
             
+            arrow = new component(812*.6, 288*.6,"images/portfoliologo.png", winwidth -900, winheight + -400, "image", false);
+            pages[2].push(arrow);
 
+            arrow = new component(100*.6, 78*.6,"images/debris/skullinthedirt.png", myGamePiece.x+50, myGamePiece.y +20, "image", false);
+            pages[2].push(arrow);
+            
+            //background debris for page 2
+            
+            
            
 
 
 
-            myGamePiece = new component(120, 120, "images/playeridle.png", 10, 120, "image", true);
-            myGameArea.start();
 
-            npc = new component(120, 120,"images/playeridle.png", 10, 200, "image", false);
-            objectlist.push(npc);
 
-            paper = new component(120, 120,"images/portfoliopaper.png", 50, 100, "image", false);
-            objectlist.push(paper);
+            
+            
+         
+
 
 
         }
 
-      
-
-
-        
-
-
+    
          
         var myGameArea = {
             canvas : document.createElement("canvas"),
             start : function() {
-              this.canvas.width = window.innerWidth;
-              this.canvas.height = window.innerHeight;
+              this.canvas.width = winwidth;
+              console.log(winwidth);
+              this.canvas.height = winheight;
+              console.log(winheight);
               
 
 
@@ -248,8 +371,7 @@ break;
         //testing above
         
         //x
-
-        
+      
         function component(width, height, color, x, y, type, animated) {
             this.type = type;
             this.animated = animated
@@ -272,16 +394,41 @@ break;
                 ctx = myGameArea.context;
 
           
+               if(myGamePiece.x > winwidth){
+                 
+                 myGamePiece.x = -20;
+                 if(pages[(pagenum + 1)] != null){
+                   pagenum++;
+                 }
+               }else if(myGamePiece.x < -100){
 
-                /*if(.5*myGamePiece.y > 120){
+                myGamePiece.x = (winwidth - 40);
+                if(pages[(pagenum - 1)] != null){
+                   pagenum--;
+                 }
+                
+
+
+
+
+               }
+ if(pagenum == 3){
+                  window.location = "resumepage.html";
+                 }
+
+
+
+               
+                /*
+                if(.5*myGamePiece.y > 120){
                   myGamePiece.height = 120;
                   myGamePiece.width = 120;
                   
                 }else{
                   myGamePiece.height = myGamePiece.height = .5*myGamePiece.y;
                   myGamePiece.width = myGamePiece.height = .5*myGamePiece.y;
-                }*/
-
+                }
+                */
                 
                
 
@@ -335,19 +482,23 @@ break;
             //lebackground.update();
             myGamePiece.newPos();
             myGamePiece.update(); 
+
+            myGamePiece2.newPos();
+            myGamePiece2.update(); 
+        
          
-            for(i = 0; i < objectlist.length; i++){
-              if(objectlist[i] != null){
+            for(i = 0; i < (pages[pagenum].length); i++){
+              if(pages[pagenum][i] != null){
               
-              objectlist[i].update();  
+                pages[pagenum][i].update();       //code that generates background items according to page
               }
             }
             if(effect != null && halo==true){
            
            effect.update();
-          
+        
            effect.x = myGamePiece.x;
-           effect.y = myGamePiece.y - myGamePiece.height/6;
+           effect.y = myGamePiece.y ;
            effect.height = myGamePiece.height;
            effect.width = myGamePiece.width;
             }
@@ -366,21 +517,53 @@ break;
             if (dir == "right") {myGamePiece.speedX = 3; myGamePiece.image.src = "images/bunnywalkright/walk ("+framenum+").png"}
            
         }
+
+        function zormove(dir) {
+            
+            if (dir == "up") {myGamePiece2.speedY = -3; myGamePiece2.image.src = "images/zorbunnywalkup/walk ("+framenum+").png"}
+            if (dir == "down") {myGamePiece2.speedY = 3; myGamePiece2.image.src = "images/zorbunnywalkdown/walk ("+framenum+").png"}
+            if (dir == "left") {myGamePiece2.speedX = -3; myGamePiece2.image.src = "images/zorbunnywalkright/walk ("+framenum+").png"}
+            if (dir == "right") {myGamePiece2.speedX = 3; myGamePiece2.image.src = "images/zorbunnywalkleft/walk ("+framenum+").png"}
+           
+        }
         
         function clearmove(dir) {
    
-            if (dir == "up") {myGamePiece.image.src = "images/bunnyidle"+dir+".png"}
-            if (dir == "down") {myGamePiece.image.src = "images/bunnyidledown.png"}
-            if (dir == "left") {myGamePiece.image.src = "images/bunnyidle"+dir+".png"}
-            if (dir == "right") {myGamePiece.image.src = "images/bunnyidle"+dir+".png"}
+            if (dir == "up") {myGamePiece.image.src = "images/bunnyidle"+dir+".png";}
+            if (dir == "down") {myGamePiece.image.src = "images/bunnyidle"+dir+".png";}
+            if (dir == "left") {myGamePiece.image.src = "images/bunnyidle"+dir+".png";}
+            if (dir == "right") {myGamePiece.image.src = "images/bunnyidle"+dir+".png";}
 
 
            //myGamePiece.image.src = "images/playeridle.png";
             if(activemove != true){
             myGamePiece.speedX = 0; 
             myGamePiece.speedY = 0; 
+        
             }
         }
+
+
+        //player2 clear move below
+        function zorclearmove(dir) {
+   
+   if (dir == "up") {myGamePiece2.image.src = "images/zorbunnyidle"+dir+".png";}
+   if (dir == "down") {myGamePiece2.image.src = "images/zorbunnyidle"+dir+".png";}
+   if (dir == "left") {myGamePiece2.image.src = "images/zorbunnyidle"+dir+".png";}
+   if (dir == "right") {myGamePiece2.image.src = "images/zorbunnyidle"+dir+".png";}
+
+
+  //myGamePiece.image.src = "images/playeridle.png";
+ 
+   myGamePiece2.speedX = 0; 
+   myGamePiece2.speedY = 0; 
+}
+
+
+
+
+
+
         //soundtest
    
       
@@ -392,10 +575,12 @@ break;
             clearmove("down");
             if(halo==false){
                 halo=true;
+       
                 console.log("Hat on");
           
             }else{
                 halo=false;
+              
                 console.log("Hat off");
             }            
         }
